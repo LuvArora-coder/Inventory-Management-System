@@ -277,6 +277,8 @@ def UserRegister(event=None):
         lbl_result1.config(text="Please complete the required field!", fg="red")
     else:
         cursor.execute("INSERT INTO users(username,password) VALUES(%s,%s)",(str(USERNAME.get()), str(PASSWORD.get())))
+        USERNAME.set("")
+        PASSWORD.set("")
         conn.commit()
         registerform.destroy()
 
