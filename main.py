@@ -113,8 +113,8 @@ def buyCommand(cartWindow):
     viewform.title("Construction Inventory System/View Product")
     width = 700
     height = 520
-    screen_width = 520
-    screen_height = 520
+    screen_width = viewform.winfo_screenwidth()
+    screen_height = viewform.winfo_screenheight()
     x = (screen_width / 2) - (width / 2)
     y = (screen_height / 2) - (height / 2)
     viewform.geometry("%dx%d+%d+%d" % (width, height, x, y))
