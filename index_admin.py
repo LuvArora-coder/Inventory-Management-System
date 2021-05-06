@@ -2,9 +2,10 @@ from tkinter import *
 import tkinter.messagebox as tkMessageBox
 import tkinter.ttk as ttk
 from PIL import Image, ImageTk
+import os
 import MySQLdb
 
-conn = MySQLdb.connect(host = "localhost", user = "sarwasvi", passwd = "sarwasvi", database = "inventory_management_system")
+conn = MySQLdb.connect(host = "localhost", user = "root", passwd = "root", database = "PyProject")
 cursor = conn.cursor()
 
 root = Tk()
@@ -32,11 +33,11 @@ SEARCH = StringVar()
 def resizer(e):
     global bg1, resized_bg, new_bg
     
-    bg1 = Image.open("images\\construction_background.png")
+    bg1 = Image.open(r"C:\Users\PC\Desktop\Virtual-Inventory-master\1.jpg")
     resized_bg = bg1.resize((e.width, e.height), Image.ANTIALIAS)
     new_bg = ImageTk.PhotoImage(resized_bg)
     my_canvas.create_image(0, 0, image = new_bg, anchor = "nw")
-    my_canvas.create_rectangle(4, 70, 496, 140, outline="black", fill="teal")
+    my_canvas.create_rectangle(4, 70, 496, 140, outline="black", fill="#873600")
     my_canvas.create_text(250, 100, text = "Construction Inventory System", font = ("Helvetica", 25, "bold"), fill = "white")
 
     
@@ -45,7 +46,7 @@ def Database():
     
     #cursor.execute("CREATE TABLE IF NOT EXISTS `admin` (admin_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT, password TEXT)")
     cursor.execute("CREATE TABLE IF NOT EXISTS users (user_id int PRIMARY KEY NOT NULL AUTO_INCREMENT, username varchar(20), password varchar(50))")
-    cursor.execute("CREATE TABLE IF NOT EXISTS product (product_id int PRIMARY KEY NOT NULL AUTO_INCREMENT, product_name varchar(50), product_qty TEXT, product_price varchar(10))")
+    cursor.execute("CREATE TABLE IF NOT EXISTS product (product_id int PRIMARY KEY NOT NULL AUTO_INCREMENT, product_name varchar(50), product_qty varchar(10), product_price varchar(10))")
     cursor.execute("SELECT * FROM users WHERE username = 'admin' AND password = 'admin'")
     if cursor.fetchone() is None:
         #cursor.execute("INSERT INTO `admin` (username, password) VALUES('admin', 'admin')")
@@ -65,7 +66,7 @@ def ShowLoginForm(e):
     y = (screen_height/2) - (height/2)
     loginform.resizable(0, 0)
     loginform.geometry("%dx%d+%d+%d" % (width, height, x, y))
-    loginform.config(bg="teal")
+    loginform.config(bg="#873600")
     LoginForm()
 
 
@@ -73,7 +74,7 @@ def LoginForm():
     global lbl_result
     TopLoginForm = Frame(loginform, width=300, height=20, bd=1, relief=SOLID)
     TopLoginForm.pack(side=TOP, pady=20)
-    image1 = Image.open("images\\admin_img_resized.png")
+    image1 = Image.open(r"C:\Users\PC\Desktop\Virtual-Inventory-master\3.jpg")
     #image1 = image1.resize((20, 20), Image.ANTIALIAS)
     test = ImageTk.PhotoImage(image1)
     lbl_text = Label(TopLoginForm, text="  Administrator's Login", font=('arial', 18), width=300)
@@ -95,7 +96,7 @@ def LoginForm():
     password.place(x = 160, y = 75)
     lbl_result = Label(MidLoginForm, text="", font=('arial', 12))
     lbl_result.place(x = 20, y = 120 )
-    btn_login = Button(MidLoginForm, text="Login", font=('arial', 18), width=10, bg = "teal", fg = "white", command=Login)
+    btn_login = Button(MidLoginForm, text="Login", font=('arial', 18), width=10, bg = "#873600", fg = "white", command=Login)
     btn_login.place(x = 75, y = 160)
     btn_login.bind('<Return>', Login)
 
@@ -130,16 +131,18 @@ def Login(event=None):
             USERNAME.set("")
             PASSWORD.set("")
 
+
 # called by Login, calls homepage
 def ShowHome():
+    #print(Home)
     root.withdraw()
     loginform.destroy()
-    Home()
+    os.system("python home_page.py")
+    #Home()
     
-
+'''
 # home page   
 def Home():
-    print('Home')
     global Home, bg_home, canvas
     Home = Toplevel()
     Home.title("Construction Inventory System/Home")
@@ -156,23 +159,18 @@ def Home():
     canvas = Canvas(Home, width = 1024, height = 520)
     canvas.create_image(0, 0, image = bg_home, anchor = "nw")  #nw: northwest
     canvas.pack(fill = "both", expand = True)
-    canvas.create_rectangle(260, 70, 780, 140, outline="black", fill="teal")
+    canvas.create_rectangle(260, 70, 780, 140, outline="black", fill="#873600")
     canvas.create_text(520, 100, text = "Construction Inventory System", font = ("Helvetica", 25, "bold"), fill = "white")
 
-    view_button = Button(Home, text = "View Our Products", height = 3, width = 15, relief = RAISED, font = "Helvetica", command = "ShowLoginForm", bg = "white", fg = "teal")
+    view_button = Button(Home, text = "View Our Products", height = 3, width = 15, relief = RAISED, font = "Helvetica", command = "ShowLoginForm", bg = "white", fg = "#873600")
     view_window = canvas.create_window(200, 250, anchor = "nw", window = view_button)
     view_button.bind('<Button-1>', ShowView)
 
-    product_button = Button(Home, text = "Add New Product", height = 3, width = 15, relief = RAISED, font = "Helvetica", command = "ShowLoginForm", bg = "white", fg = "teal")
+    product_button = Button(Home, text = "Add New Product", height = 3, width = 15, relief = RAISED, font = "Helvetica", command = "ShowLoginForm", bg = "white", fg = "#873600")
     product_window = canvas.create_window(700, 250, anchor = "nw", window = product_button)
     product_button.bind('<Button-1>', ShowAddNew)
     
     
-    '''
-    Title = Frame(bg_frame, bd=1, relief=SOLID)
-    Title.pack(pady=10)
-    lbl_display = Label(Title, text="Construction Inventory System", font=('arial', 45))
-    lbl_display.pack() '''
     menubar = Menu(Home)
     filemenu = Menu(menubar, tearoff=0)
     filemenu2 = Menu(menubar, tearoff=0)
@@ -209,21 +207,21 @@ def ViewForm():
     LeftViewForm.pack(side=LEFT, fill=Y)
     MidViewForm = Frame(viewform, width=600)
     MidViewForm.pack(side=RIGHT)
-    lbl_text = Label(TopViewForm, text="View Products", font=('arial', 18), width=600, bg = "teal", fg = "white")
+    lbl_text = Label(TopViewForm, text="View Products", font=('arial', 18), width=600, bg = "#873600", fg = "white")
     lbl_text.pack(fill=X)
     lbl_txtsearch = Label(LeftViewForm, text="Search", font=('arial', 15))
     lbl_txtsearch.pack(side=TOP, anchor=W)
     search = Entry(LeftViewForm, textvariable=SEARCH, font=('arial', 15), width=10)
     search.pack(side=TOP,  padx=10, fill=X)
-    btn_search = Button(LeftViewForm, text="Search", bg = "teal", fg = "white",command=Search)
+    btn_search = Button(LeftViewForm, text="Search", bg = "#873600", fg = "white",command=Search)
     btn_search.pack(side=TOP, padx=10, pady=10, fill=X)
-    btn_reset = Button(LeftViewForm, text="Reset", bg = "teal", fg = "white", command=Reset)
+    btn_reset = Button(LeftViewForm, text="Reset", bg = "#873600", fg = "white", command=Reset)
     btn_reset.pack(side=TOP, padx=10, pady=10, fill=X)
-    btn_delete = Button(LeftViewForm, text="Delete", bg = "teal", fg = "white", command=Delete)
+    btn_delete = Button(LeftViewForm, text="Delete", bg = "#873600", fg = "white", command=Delete)
     btn_delete.pack(side=TOP, padx=10, pady=10, fill=X)
     scrollbarx = Scrollbar(MidViewForm, orient=HORIZONTAL)
     scrollbary = Scrollbar(MidViewForm, orient=VERTICAL)
-    tree = ttk.Treeview(MidViewForm, columns=("ProductID", "Product Name", "Product Qty", "Product Price"), selectmode="extended", height=100, yscrollcommand=scrollbary.set, xscrollcommand=scrollbarx.set)
+    tree = ttk.Treeview(MidViewForm, columns=("ProductID", "Product Name", "Product Qty", "Product Price"), selectmode="browse", height=100, yscrollcommand=scrollbary.set, xscrollcommand=scrollbarx.set)
     scrollbary.config(command=tree.yview)
     scrollbary.pack(side=RIGHT, fill=Y)
     scrollbarx.config(command=tree.xview)
@@ -299,7 +297,7 @@ def ShowAddNew(event  = None):
 def AddNewForm():
     TopAddNew = Frame(addnewform, width=600, height=100, bd=1, relief=SOLID)
     TopAddNew.pack(side=TOP, pady=20)
-    lbl_text = Label(TopAddNew, text="Add New Product", font=('arial', 18), width=600, bg = "teal", fg = "white")
+    lbl_text = Label(TopAddNew, text="Add New Product", font=('arial', 18), width=600, bg = "#873600", fg = "white")
     lbl_text.pack(fill=X)
     MidAddNew = Frame(addnewform, width=600)
     MidAddNew.pack(side=TOP, pady=50)
@@ -307,15 +305,15 @@ def AddNewForm():
     lbl_productname.grid(row=0, sticky=W)
     lbl_qty = Label(MidAddNew, text="Product Quantity:", font=('arial', 25), bd=10)
     lbl_qty.grid(row=1, sticky=W)
-    lbl_price = Label(MidAddNew, text="Product Price:", font=('arial', 25), bd=10)
+    lbl_price = Label(MidAddNew, text="Product Price (Per Item):", font=('arial', 25), bd=10)
     lbl_price.grid(row=2, sticky=W)
-    productname = Entry(MidAddNew, textvariable=PRODUCT_NAME, font=('arial', 25), width=15)
+    productname = Entry(MidAddNew, textvariable=PRODUCT_NAME, font=('arial', 25), width=10)
     productname.grid(row=0, column=1)
-    productqty = Entry(MidAddNew, textvariable=PRODUCT_QTY, font=('arial', 25), width=15)
+    productqty = Entry(MidAddNew, textvariable=PRODUCT_QTY, font=('arial', 25), width=10)
     productqty.grid(row=1, column=1)
-    productprice = Entry(MidAddNew, textvariable=PRODUCT_PRICE, font=('arial', 25), width=15)
+    productprice = Entry(MidAddNew, textvariable=PRODUCT_PRICE, font=('arial', 25), width=10)
     productprice.grid(row=2, column=1)
-    btn_add = Button(MidAddNew, text="Save", font=('arial', 18), width=30, bg = "teal", fg = "white", command=AddNew)
+    btn_add = Button(MidAddNew, text="Save", font=('arial', 18), width=30, bg = "#873600", fg = "white", command=AddNew)
     btn_add.grid(row=3, columnspan=2, pady=20)
 
 
@@ -333,31 +331,49 @@ def Logout():
     if result == 'yes': 
         admin_id = ""
         root.deiconify()
-        print(Home)
+        #print(Home)
         Home.destroy()
-    
+        #del Home
+        #print(Home)
+   
 
 def Exit2():
     result = tkMessageBox.askquestion('Simple Inventory System', 'Are you sure you want to exit?', icon="warning")
     if result == 'yes':
         Home.destroy()
         exit()
+'''
 
 
-bg = ImageTk.PhotoImage(file = "images\\construction_background.png")
+def Back():
+    result = tkMessageBox.askquestion('ADMIN SIDE', 'Do You Want To Exit To Main Menu?',
+                                      icon="warning")
+    if result == 'yes':
+
+        root.destroy()
+        os.system("python pyproj.py")
+
+
+
+bg = ImageTk.PhotoImage(file = r"C:\Users\PC\Desktop\Virtual-Inventory-master\1.jpg")
 my_canvas = Canvas(root, width = 500, height = 500)
 
 
 my_canvas.create_image(0, 0, image = bg, anchor = "nw")  #nw: northwest
-my_canvas.create_rectangle(4, 70, 496, 140, outline="black", fill="teal")
+my_canvas.create_rectangle(4, 70, 496, 140, outline="black", fill="#873600")
 my_canvas.create_text(250, 100, text = "Construction Inventory System", font = ("Helvetica", 25, "bold"), fill = "white")
 
-login_button = Button(root, text = "Login", height = 5, width = 10, relief = RAISED, font = "Times", fg = "teal", command = "ShowLoginForm")
-login_window = my_canvas.create_window(210, 200, anchor = "nw", window = login_button)
+login_button = Button(root, text = "Login", height = 3, width = 10, relief = RAISED, font = ("Helvetica", 18, "bold"), fg = "#873600", command = "ShowLoginForm")
+login_window = my_canvas.create_window(190, 200, anchor = "nw", window = login_button)
 login_button.bind('<Button-1>', ShowLoginForm)
 
 my_canvas.pack(fill = "both", expand = True)
 root.bind('<Configure>', resizer)
 
+menubar = Menu(root)
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="BACK",command=Back)
+menubar.add_cascade(label="BACK", menu=filemenu)
+root.config(menu=menubar)
 if __name__ == '__main__':
     root.mainloop()
