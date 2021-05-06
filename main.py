@@ -134,8 +134,8 @@ def buyCommand(cartWindow):
 
     # Define attributes for Bill entry
     heading = "Retail Invoice"
-    cust_name = f"Customer Name    : {width}"
-    cust_phno = f"Customer Id  : {1}"
+    cust_name = ""
+    cust_phno = ""
     # Defining date and time variables
     date_string = "Date : " + time.strftime("%d/%b/%Y")
     time_string = "Time : " + time.strftime("%I:%M:%S %p")
